@@ -38,6 +38,66 @@ class ArrayStack:
         return str(self._vals)
 
 
+class MyStack:
+    """
+    使用队列实现栈
+    题目出处：https://leetcode.cn/problems/implement-stack-using-queues/description/
+    """
+
+    def __init__(self):
+        self.q1 = []
+        self.q2 = []
+
+    def push(self, x):
+        self.q1.append(x)
+
+    def pop(self):
+        if self.empty():
+            raise Empty('the stack is empty')
+        if len(self.q1):
+            for i in range(len(self.q1)):
+                self.q2.append(self.q1[i])
+            self.q1.clear()
+        return self.q2.pop()
+
+    def top(self):
+        if self.empty():
+            raise Empty('the stack is empty')
+        if len(self.q1):
+            for i in range(len(self.q1)):
+                self.q2.append(self.q1[i])
+            self.q1.clear()
+        return self.q2[-1]
+
+    def empty(self):
+        return len(self.q1) == 0 and len(self.q2) == 0
+
+
+class MinStack:
+    """
+    最小栈
+    题目出处：https://leetcode.cn/problems/min-stack/description/
+    """
+
+    def __init__(self):
+        self.s1 = []
+        self.s2 = []
+
+    def push(self, val):
+        self.s1.append(val)
+        self.s2.append(val if len(self.s2) == 0 else min(val, self.s2[-1]))
+
+    def pop(self):
+        self.s1.pop()
+        self.s2.pop()
+
+    def top(self):
+        return self.s1[-1]
+
+    def getMin(self):
+        return self.s2[-1]
+
+
 if __name__ == '__main__':
     s = ArrayStack(10)
     for i in range(10):
