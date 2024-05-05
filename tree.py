@@ -117,7 +117,7 @@ def postorderTraversal_non_recur(root: TreeNode):
         stack2 = []
         stack1.append(root)
         while stack1:
-            # 遍历顺序变为：根右左
+            # 遍历顺序变为：根右左（参考非递归的先序遍历）
             root = stack1.pop()
             stack2.append(root)
             if root.left:
@@ -127,4 +127,30 @@ def postorderTraversal_non_recur(root: TreeNode):
         # 对所有节点做一个逆序处理就变成了左右根
         while stack2:
             ret.append(stack2.pop().val)
+    return ret
+
+
+def postorderTraversal_non_recur_1(root: TreeNode):
+    """
+    二叉树的后序遍历（非递归）【使用一个栈，空间复杂度：O(height)】
+    :param root:
+    :return:
+    """
+    ret = []
+    if root is not None:
+        stack = []
+        stack.append(root)
+        # root 的含义：上一次打印的节点
+        while stack:
+            cur = stack[-1]
+            # 当前节点有左子树并且左子树没有被处理过
+            if cur.left is not None and cur.left is not root and cur.right is not root:
+                stack.append(cur.left)
+            # 当前节点有右子树并且右子树没有被处理过
+            elif cur.right is not None and root != cur.right:
+                stack.append(cur.right)
+            # 没有左右子树或者左右子树都被处理过了
+            else:
+                ret.append(cur.val)
+                root = stack.pop()
     return ret
