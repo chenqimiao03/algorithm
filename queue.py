@@ -99,9 +99,10 @@ class ArrayQueue:
         if self.isEmpty():
             raise Empty('the queue is empty')
         r = self._vals[self.first]
-        self.first += 1
         if self.first == self.last:
             self.first, self.last = 0, 0
+        else:
+            self.first += 1
         return r
 
     def peek(self):
@@ -114,152 +115,6 @@ class ArrayQueue:
 
     def __str__(self):
         return str(self._vals)
-
-
-class MyCircularQueue:
-    """
-    循环队列
-    题目出处：https://leetcode.cn/problems/design-circular-queue/
-    """
-
-    def __init__(self, n):
-        self.cap = n
-        self._vals = [None for _ in range(self.cap)]
-        self.first, self.last, self._size = 0, 0, 0
-
-    def enQueue(self, value):
-        if self.isFull():
-            return False
-        self._vals[self.last] = value
-        self.last = 0 if self.last == self.cap - 1 else self.last + 1
-        self._size += 1
-        return True
-
-    def deQueue(self):
-        if self.isEmpty():
-            return False
-        self.first = 0 if self.first == self.cap - 1 else self.first + 1
-        self._size -= 1
-        return True
-
-    def Front(self):
-        if self.isEmpty():
-            return -1
-        return self._vals[self.first]
-
-    def Rear(self):
-        if self.isEmpty():
-            return -1
-        last = self.cap - 1 if self.last == 0 else self.last - 1
-        return self._vals[last]
-
-    def isEmpty(self):
-        return self._size == 0
-
-    def isFull(self):
-        return self._size == self.cap
-
-
-class MyQueue:
-    """
-    使用栈实现队列
-    题目出处：https://leetcode.cn/problems/implement-queue-using-stacks/description/
-    """
-
-    def __init__(self):
-        self.s1 = []
-        self.s2 = []
-
-    def push(self, x):
-        self.s1.append(x)
-
-    def pop(self):
-        if self.empty():
-            raise Empty('the queue is empty')
-        if len(self.s2) == 0:
-            while len(self.s1):
-                self.s2.append(self.s1.pop())
-        return self.s2.pop()
-
-    def peek(self):
-        if self.empty():
-            raise Empty('the queue is empty')
-        if len(self.s2) == 0:
-            while len(self.s1):
-                self.s2.append(self.s1.pop())
-        return self.s2[-1]
-
-    def empty(self):
-        return len(self.s1) == 0 and len(self.s2) == 0
-
-
-class Deque:
-    """
-    使用固定数组实现双端队列（也可以使用双向链表实现）
-    """
-
-    def __init__(self, n):
-        self.cap = n
-        self.d = [None for _ in range(n)]
-        self.left, self.right, self.size = 0, 0, 0
-
-    def insertFront(self, value):
-        if self.isFull():
-            return False
-        else:
-            if self.isEmpty():
-                self.left, self.right = 0, 0
-                self.d[0] = value
-            else:
-                self.left = self.cap - 1 if self.left == 0 else self.left - 1
-                self.d[self.left] = value
-            self.size += 1
-            return True
-
-    def insertLast(self, value):
-        if self.isFull():
-            return False
-        else:
-            if self.isEmpty():
-                self.left, self.right = 0, 0
-                self.d[0] = value
-            else:
-                self.right = 0 if self.right == self.cap - 1 else self.right + 1
-                self.d[self.right] = value
-            self.size += 1
-            return True
-
-    def deleteFront(self):
-        if self.isEmpty():
-            return False
-        else:
-            self.left = 0 if self.left == self.cap - 1 else self.left + 1
-            self.size -= 1
-            return True
-
-    def deleteLast(self):
-        if self.isEmpty():
-            return False
-        else:
-            self.right = self.cap - 1 if self.right == 0 else self.right - 1
-            self.size -= 1
-            return True
-
-    def getFront(self):
-        if self.isEmpty():
-            return -1
-        return self.d[self.left]
-
-    def getRear(self):
-        if self.isEmpty():
-            return -1
-        return self.d[self.right]
-
-    def isEmpty(self):
-        return self.size == 0
-
-    def isFull(self):
-        return self.size == self.cap
 
 
 if __name__ == '__main__':
