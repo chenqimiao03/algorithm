@@ -161,6 +161,46 @@ def quickSort(arr):
     return arr
 
 
+def heapSort(arr):
+    """
+    堆排序
+    :param arr:
+    :return:
+    """
+    def heapify(size):
+        """
+        从上往下调整大根堆
+        :param:
+        :return:
+        """
+        nonlocal arr
+        # 左孩子的位置
+        i = 0
+        l = 2 * i + 1
+        # 有左孩子
+        while l < size:
+            # 取左右孩子最大值的下标
+            best = l + 1 if l + 1 < size and arr[l + 1] > arr[l] else l
+            best = best if arr[best] > arr[i] else i
+            if best == i:
+                break
+            arr[best], arr[i] = arr[i], arr[best]
+            i = best
+            l = i * 2 + 1
+
+    for i in range(len(arr)):
+        # 建堆
+        while i > 0 and arr[i] > arr[(i - 1) // 2]:
+            arr[i], arr[(i - 1) // 2] = arr[(i - 1) // 2], arr[i]
+            i = (i - 1) // 2
+    size = len(arr)
+    while size > 1:
+        arr[0], arr[size - 1] = arr[size - 1], arr[0]
+        size -= 1
+        heapify(size)
+    return arr
+
+
 def test(functions: dict, name: str) -> None: # noqa
     """
     对数器
@@ -190,10 +230,11 @@ if __name__ == '__main__':
         "selectionSort": selectionSort,
         "bubbleSort": bubbleSort,
         "insertionSort": insertionSort,
-        "quickSort": quickSort
-
+        "quickSort": quickSort,
+        "heapSort": heapSort
     }
     # test(functions, "selectionSort")
     # test(functions, "bubbleSort")
     # test(functions, "insertionSort")
-    test(functions, "quickSort")
+    # test(functions, "quickSort")
+    test(functions, "heapSort")
