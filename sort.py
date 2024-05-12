@@ -50,6 +50,117 @@ def insertionSort(arr: []) -> None: # noqa
     return None
 
 
+def mergeSoer(arr: []):
+    """
+    归并排序（非递归版本）
+    验证链接：https://leetcode.cn/problems/sort-an-array/description/
+    :param arr:
+    :return:
+    """
+    n, step = len(arr), 1
+    HELP = [None for _ in range(n)]
+
+    def _merge(l, mid, r):
+        nonlocal HELP
+        i, a, b = l, l, mid + 1
+        while a <= mid and b <= r:
+            if arr[a] <= arr[b]:
+                HELP[i] = arr[a]
+                a += 1
+            else:
+                HELP[i] = arr[b]
+                b += 1
+            i += 1
+        while a <= mid:
+            HELP[i] = arr[a]
+            a += 1
+            i += 1
+        while b <= r:
+            HELP[i] = arr[b]
+            b += 1
+            i += 1
+        for i in range(l, r + 1):
+            arr[i] = HELP[i]
+
+    while step < n:
+        l = 0
+        while l < n:
+            mid = l + step - 1
+            # 右边没有数据了
+            if mid + 1 >= n:
+                break
+            # 一遍情况右边界的取值为：l + 2 * step - 1，但是当 l + 2 * step  - 1 大于 n - 1 时，右边界必定是 n - 1
+            r = min(l + (step << 1) - 1, n - 1)
+            _merge(l, mid, r)
+            l = r + 1
+        step <<= 1
+
+
+def quickSort(arr):
+    """
+    随机快速排序
+
+    :param arr:
+    :return:
+    """
+    def partition(l, r, x):
+        """
+        将数组 arr 划分成两部分，其中左边的数都小于等于 x，右边的数都大于 x
+        :param l:
+        :param r:
+        :param x:
+        :return:
+        """
+        nonlocal arr
+        a, xi = l, 0
+        for i in range(l, r + 1):
+            if arr[i] <= x:
+                # swap arr[i], arr[a]
+                arr[a], arr[i] = arr[i], arr[a]
+                if arr[a] == x:
+                    xi = a
+                a += 1
+        # 将小于等于 x 的这一部分的最后一个数改为 x
+        arr[xi], arr[a - 1] = arr[a - 1], arr[xi]
+        return a - 1
+    def partition_1(l, r, x):
+        """
+        将数组 arr 划分成两部分，其中左边的数都小于等于 x，中间部分的数都等于 x，右边的数都大于 x（这种思想可以用于解决荷兰国旗问题）
+        :param l:
+        :param r:
+        :param x:
+        :return:
+        """
+        nonlocal arr
+        a, b, i = l, r, l
+        while i <= b:
+            if arr[i] == x:
+                i += 1
+            elif arr[i] < x:
+                arr[i], arr[a] = arr[a], arr[i]
+                a += 1
+                i += 1
+            else:
+                arr[i], arr[b] = arr[b], arr[i]
+                b -= 1
+        return a, b
+
+    def _quickSort(l, r):
+        nonlocal arr
+        if l >= r:
+            return
+        # 随机选取 arr[l ... r] 中的一个数
+        x = arr[l + int(random.random() * (r - l + 1))]
+        # mid = partition(l, r, x)
+        # _quickSort(l, mid - 1)
+        # _quickSort(mid + 1, r)
+        a, b = partition_1(l, r, x)
+        _quickSort(l, a - 1)
+        _quickSort(b + 1, r)
+    _quickSort(0, len(arr) - 1)
+    return arr
+
+
 def test(functions: dict, name: str) -> None: # noqa
     """
     对数器
@@ -78,8 +189,11 @@ if __name__ == '__main__':
     functions = {
         "selectionSort": selectionSort,
         "bubbleSort": bubbleSort,
-        "insertionSort": insertionSort
+        "insertionSort": insertionSort,
+        "quickSort": quickSort
+
     }
-    test(functions, "selectionSort")
-    test(functions, "bubbleSort")
-    test(functions, "insertionSort")
+    # test(functions, "selectionSort")
+    # test(functions, "bubbleSort")
+    # test(functions, "insertionSort")
+    test(functions, "quickSort")
