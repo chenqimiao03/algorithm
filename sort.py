@@ -201,6 +201,94 @@ def heapSort(arr):
     return arr
 
 
+def countSort(arr):
+    """
+    计数排序
+    :param arr:
+    :return:
+    """
+    n = len(arr)
+    minValue = min(arr)
+    # 对数组中每一个数字，减去数组中的最小值，就可以把 arr 转成了非负数组
+    for i in range(n):
+        arr[i] -= minValue
+    maxValue = max(arr)
+    count = [0 for _ in range(maxValue + 1)]
+    # 统计每个数出现的次数
+    for i in range(n):
+        count[arr[i]] += 1
+    k = 0
+    for i in range(maxValue + 1):
+        for j in range(count[i]):
+            arr[k] = i
+            k += 1
+    for i in range(n):
+        arr[i] += minValue
+    return arr
+
+
+def radixSort(arr):
+    """
+    基数排序
+    :param arr:
+    :return:
+    """
+    def _radixSort(m):
+        """
+        基数排序核心代码
+        :param m: arr 中最大值在 BASE 进制下有几位
+        :return:
+        """
+        offset = 1
+        nonlocal BASE, arr, CNTS, HELP
+        n = len(arr)
+        while m > 0:
+            CNTS = [0 for _ in range(len(CNTS))]
+            for i in range(n):
+                # 提取 arr[i] 的第 offset 位的数字
+                CNTS[(arr[i] // offset) % BASE] += 1
+            # 处理成前缀次数累加的形式
+            for i in range(1, BASE):
+                CNTS[i] = CNTS[i] + CNTS[i - 1]
+            # 从右往左遍历是为了保持原有的相对顺序
+            for i in range(n - 1, -1, -1):
+                j = (arr[i] // offset) % BASE
+                CNTS[j] -= 1
+                HELP[CNTS[j]] = arr[i]
+            for i in range(n):
+                arr[i] = HELP[i]
+            m -= 1
+            offset *= BASE
+
+    def _numbt(number): # number of bit
+        """
+        获取数组中最大的数有多少位
+        :return:
+        """
+        ans = 0
+        while number > 0:
+            ans += 1
+            number //= BASE
+        return ans
+
+    n = len(arr)
+    HELP = [None for i in range(n)]
+    BASE = 10
+    CNTS = [None for i in range(BASE)]
+    if n > 1:
+        # 获取数组中的最小值
+        minValue = min(arr)
+        # 对数组中每一个数字，减去数组中的最小值，就可以把 arr 转成了非负数组
+        for i in range(n):
+            arr[i] -= minValue
+        maxValue = max(arr)
+        _radixSort(_numbt(maxValue))
+        # 还原数组中原来的数据
+        for i in range(n):
+            arr[i] += minValue
+    return arr
+
+
 def test(functions: dict, name: str) -> None: # noqa
     """
     对数器
@@ -216,7 +304,7 @@ def test(functions: dict, name: str) -> None: # noqa
     """
     results = []
     for _ in range(100):
-        a = [random.choice(range(1, 10000)) for _ in range(100)]
+        a = [random.choice(range(1, 100)) for _ in range(100)]
         b = copy.deepcopy(a)
         b.sort()
         functions[name](a)
@@ -231,10 +319,15 @@ if __name__ == '__main__':
         "bubbleSort": bubbleSort,
         "insertionSort": insertionSort,
         "quickSort": quickSort,
-        "heapSort": heapSort
+        "heapSort": heapSort,
+        "countSort": countSort,
+        "radixSort": radixSort
     }
     # test(functions, "selectionSort")
     # test(functions, "bubbleSort")
     # test(functions, "insertionSort")
     # test(functions, "quickSort")
-    test(functions, "heapSort")
+    # test(functions, "heapSort")
+    # test(functions, "countSort")
+    test(functions, "radixSort")
+
