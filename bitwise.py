@@ -73,8 +73,22 @@ def bk(n):
     return n & ((~n) + 1)
 
 
+# 获取大于等于 n 的最小的 2 的幂次方
+def near(n):
+    if n <= 0:
+        return 1
+    n -= 1
+    # 将最右的位都变成 1
+    n |= n >> 1
+    n |= n >> 2
+    n |= n >> 4
+    n |= n >> 8
+    n |= n >> 16
+    return n + 1
+
+
 if __name__ == '__main__':
-    print_b(4294967292)
+    # print_b(4294967292)
     # a, b = 10, 20
     # print(MAX(a, b))
-
+    print(near(500))
