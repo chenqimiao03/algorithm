@@ -15,6 +15,7 @@
 
 对于非负数，左移 i 位，相当于乘于 2 的 i 次方；右移 i 位，相当于除以 2 的 i 次方
 """
+import random
 
 
 def print_b(a):
@@ -90,22 +91,31 @@ def near(n):
 # 位运算实现加减乘除
 # 加法：a ^ b + 进位信息（(a & b) << 1）
 def add(a, b):
-    ans = 0
-    while b != 0:
-        ans = (a ^ b) & 0xffffffff
-        # 保存进位信息
-        b = (a & b) << 1
-        a = ans
-    return ans
+    def _add(a, b):
+        ans = 0
+        while b != 0:
+            ans = (a ^ b) & 0xffffffff
+            # 保存进位信息
+            b = ((a & b) << 1) & 0xffffffff
+            a = ans
+        return ans
+    ans = _add(a, b)
+    return -_add(((~ans) & 0x7FFFFFFF), 1) if ans & 0x80000000 else ans
 
 
 def neg(n):
-    return add(~n, 1)
+    # 非 python 直接返回 ~a + 1
+    if n > 0:
+        return ~add(n, 0xffffffff)
+    elif n == 0:
+        return 0
+    else:
+        return add((~n & 0x7fffffff), 1)
 
 
 def minus(a, b):
     # a - b = a + (-b) = a + (~b + 1)
-    return add(a, neg(b) & 0xffffffff)
+    return add(a, neg(b))
 
 
 def multipy(a, b):
@@ -132,7 +142,7 @@ def divide(a, b):
         if (x >> idx) >= y:
             ans |= 1 << idx
             x = minus(x, y << idx)
-    return ans
+    return ans if (a & 0x80000000) == (b & 0x80000000) else ~minus(ans, 1)
 
 
 if __name__ == '__main__':
@@ -140,4 +150,4 @@ if __name__ == '__main__':
     # a, b = 10, 20
     # print(MAX(a, b))
     # print(near(500))
-    print(divide(30, 2))
+    print(add(-1, -1))
