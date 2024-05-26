@@ -87,8 +87,57 @@ def near(n):
     return n + 1
 
 
+# 位运算实现加减乘除
+# 加法：a ^ b + 进位信息（(a & b) << 1）
+def add(a, b):
+    ans = 0
+    while b != 0:
+        ans = (a ^ b) & 0xffffffff
+        # 保存进位信息
+        b = (a & b) << 1
+        a = ans
+    return ans
+
+
+def neg(n):
+    return add(~n, 1)
+
+
+def minus(a, b):
+    # a - b = a + (-b) = a + (~b + 1)
+    return add(a, neg(b) & 0xffffffff)
+
+
+def multipy(a, b):
+    ans = 0
+    x = neg(a) if a < 0 else a
+    y = neg(b) if b < 0 else b
+    while y != 0:
+        if (y & 1) != 0:
+            ans = add(ans, x)
+        x <<= 1
+        y >>= 1
+    # 如果 a 和 b 同号，返回 x * y
+    # 如果 a 和 b 不同号，返回 -(x * y)
+    return ans if (a & 0x80000000) == (b & 0x80000000) else ~minus(ans, 1)
+
+
+def divide(a, b):
+    if b == 0:
+        raise ZeroDivisionError("b cannot equal 0")
+    x = neg(a) if a < 0 else a
+    y = neg(b) if b < 0 else b
+    ans = 0
+    for idx in range(30, -1, -1):
+        if (x >> idx) >= y:
+            ans |= 1 << idx
+            x = minus(x, y << idx)
+    return ans
+
+
 if __name__ == '__main__':
     # print_b(4294967292)
     # a, b = 10, 20
     # print(MAX(a, b))
-    print(near(500))
+    # print(near(500))
+    print(divide(30, 2))
