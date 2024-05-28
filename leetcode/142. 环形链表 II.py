@@ -5,6 +5,9 @@
 #         self.next = None
 
 class Solution:
+    """
+    验证链接：https://leetcode.cn/problems/linked-list-cycle-ii/description/
+    """
 
     def hasCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
         slow, fast = head, head

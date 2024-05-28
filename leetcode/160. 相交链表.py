@@ -5,6 +5,7 @@
 #         self.next = None
 
 class Solution:
+
     """
     验证链接：https://leetcode.cn/problems/intersection-of-two-linked-lists/description/
     """

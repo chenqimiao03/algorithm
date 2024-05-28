@@ -4,6 +4,9 @@
 #         self.val = val
 #         self.next = next
 class Solution:
+    """
+    验证链接：https://leetcode.cn/problems/aMhZSa/description/
+    """
     def isPalindrome(self, head: ListNode) -> bool:
         # stack = []
         # while head :

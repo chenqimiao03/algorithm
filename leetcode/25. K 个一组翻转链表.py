@@ -6,6 +6,7 @@
 class Solution:
     """
     使用容器存储每个节点，然后在数组中按K个一组进行逆序
+    验证链接：https://leetcode.cn/problems/reverse-nodes-in-k-group/description/
     """
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         tail = head

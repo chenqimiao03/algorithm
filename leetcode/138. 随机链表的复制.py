@@ -10,6 +10,7 @@ class Node:
 class Solution:
     """
     也可以使用哈希表来记录：{Node: Node'}
+    验证链接：https://leetcode.cn/problems/copy-list-with-random-pointer/description/
     """
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         if head is None:
