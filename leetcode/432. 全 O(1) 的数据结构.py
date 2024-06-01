@@ -19,13 +19,6 @@ class AllOne:
         self.tail.prev = self.head
         self.words = {}  # {str: addr}
 
-    def __str__(self):
-        head = self.head.next
-        while head != self.tail:
-            print(head.cnt, head.hashSet, end='->')
-            head = head.next
-        return '\n'
-
     @staticmethod
     def insert(cur: ListNode, pos: ListNode):
         cur.next.prev = pos
