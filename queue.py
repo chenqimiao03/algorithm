@@ -1,10 +1,3 @@
-class ListNode:
-
-    def __init__(self, val, nxt=None):
-        self.next = nxt
-        self.val = val
-
-
 class Empty(Exception):
     pass
 
@@ -15,8 +8,14 @@ class Full(Exception):
 
 class LinkedQueue:
 
+    class ListNode:
+
+        def __init__(self, val, nxt=None):
+            self.next = nxt
+            self.val = val
+
     def __init__(self):
-        self.first = ListNode(None)
+        self.first = type(self).ListNode(None)
         self.last = self.first
         self.cnt = 0
 
@@ -33,7 +32,7 @@ class LinkedQueue:
         :param val:
         :return:
         """
-        self.last.next = ListNode(val)
+        self.last.next = type(self).ListNode(val)
         self.last = self.last.next
         self.cnt += 1
 
@@ -118,22 +117,7 @@ class ArrayQueue:
 
 
 if __name__ == '__main__':
-    # q = LinkedQueue()
-    # print(q.isEmpty())
-    # for i in range(10):
-    #     q.offer(i)
-    # print(q)
-    # print(q.size())
-    # for i in range(10):
-    #     assert q.peek() == i
-    #     assert q.poll() == i
-    # print(q.isEmpty())
-    # print(q.first.next is None)
-    # print(q.first is q.last)
-    # q.offer(100)
-    # print(q.size())
-    # print(q)
-    q = ArrayQueue(10)
+    q = LinkedQueue()
     print(q.isEmpty())
     for i in range(10):
         q.offer(i)
@@ -143,6 +127,21 @@ if __name__ == '__main__':
         assert q.peek() == i
         assert q.poll() == i
     print(q.isEmpty())
+    print(q.first.next is None)
+    print(q.first is q.last)
     q.offer(100)
     print(q.size())
     print(q)
+    # q = ArrayQueue(10)
+    # print(q.isEmpty())
+    # for i in range(10):
+    #     q.offer(i)
+    # print(q)
+    # print(q.size())
+    # for i in range(10):
+    #     assert q.peek() == i
+    #     assert q.poll() == i
+    # print(q.isEmpty())
+    # q.offer(100)
+    # print(q.size())
+    # print(q)
