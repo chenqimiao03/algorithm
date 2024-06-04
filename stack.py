@@ -38,6 +38,51 @@ class ArrayStack:
         return str(self._vals)
 
 
+class LinkedStack:
+
+    class ListNode:
+
+        def __init__(self, val, next=None):
+            self.next = next
+            self.val = val
+
+    def __init__(self):
+        self._size = 0
+        self.top = type(self).ListNode(None)
+    
+    def push(self, val):
+        n = type(self).ListNode(val)
+        n.next = self.top.next
+        self.top.next = n
+        self._size += 1
+
+    def pop(self):
+        if self._size == 0:
+            raise Empty('the stack is empty')
+        top = self.top.next
+        self.top.next = top.next
+        self._size -= 1
+        return top.val
+
+    def top(self):
+        if self._size == 0:
+            raise Empty('the stack is empty')
+        top = self.top.next
+        return top.val
+
+    def size(self):
+        return self._size
+
+    def __str__(self):
+        vals = []
+        head = self.top.next
+        while head:
+            vals.append(head.val)
+            head = head.next
+        vals.reverse()
+        return '->'.join(str(val) for val in vals)
+
+
 if __name__ == '__main__':
     s = ArrayStack(10)
     for i in range(10):
