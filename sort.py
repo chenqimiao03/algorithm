@@ -309,8 +309,7 @@ def test(functions: dict, name: str) -> None: # noqa
         b.sort()
         functions[name](a)
         results.append(all(map(lambda x: x[0] == x[1], zip(a, b))))
-    print(all(results))
-    return None
+    return all(results)
 
 
 if __name__ == '__main__':
@@ -318,16 +317,18 @@ if __name__ == '__main__':
         "selectionSort": selectionSort,
         "bubbleSort": bubbleSort,
         "insertionSort": insertionSort,
+        "mergeSoer": mergeSoer,
         "quickSort": quickSort,
         "heapSort": heapSort,
         "countSort": countSort,
         "radixSort": radixSort
     }
-    # test(functions, "selectionSort")
-    # test(functions, "bubbleSort")
-    # test(functions, "insertionSort")
-    # test(functions, "quickSort")
-    # test(functions, "heapSort")
-    # test(functions, "countSort")
-    test(functions, "radixSort")
+    assert test(functions, "selectionSort")
+    assert test(functions, "bubbleSort")
+    assert test(functions, "insertionSort")
+    assert test(functions, "mergeSoer")
+    assert test(functions, "quickSort")
+    assert test(functions, "heapSort")
+    assert test(functions, "countSort")
+    assert test(functions, "radixSort")
 
