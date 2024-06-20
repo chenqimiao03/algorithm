@@ -1,18 +1,16 @@
-
-class ListNode:
-
-    def __init__(self, val, next=None):
-        self.val = val
-        self.next = next
-
-
 class LinkedList:
 
+    class ListNode:
+
+        def __init__(self, val, next=None):
+            self.val = val
+            self.next = next
+
     def __init__(self):
-        self.head = ListNode(None)
+        self.head = type(self).ListNode(None)
 
     def appendleft(self, val):
-        n = ListNode(val)
+        n = type(self).ListNode(val)
         n.next = self.head.next
         self.head.next = n
 
