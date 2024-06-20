@@ -1,3 +1,6 @@
+ # type: ignore
+
+
 class Empty(Exception):
     pass
 
