@@ -1,7 +1,4 @@
 class MyQueue:
-    """
-    验证链接：https://leetcode.cn/problems/implement-queue-using-stacks/
-    """
 
     def __init__(self):
         self.s1 = []
