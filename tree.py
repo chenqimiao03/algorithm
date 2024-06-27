@@ -20,7 +20,7 @@ class BSTree:
         pass
 
 
-# class Trie:
+# class TrieTree:
 
 #     class TrieNode:
 
@@ -85,7 +85,7 @@ class BSTree:
 #             root.end -= 1
 
 
-class Trie:
+class TrieTree:
 
     def __init__(self) -> None:
         self._N = 150001
