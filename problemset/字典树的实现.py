@@ -154,3 +154,4 @@ class Solution:
             else:
                 ret.append(str(t.prefix(o[1])))
         return ret
+
