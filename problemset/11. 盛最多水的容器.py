@@ -15,6 +15,7 @@ class Solution:
         时间复杂度：O(N)
         空间复杂度：O(1)
         """
+        # 谁小先结算谁
         i, j = 0, len(height) - 1
         ret = 0
         while i < j:
