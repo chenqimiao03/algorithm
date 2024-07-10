@@ -11,13 +11,50 @@ class BSTree:
         self._root = None
 
     def insert(self, val):
-        pass
+        def _insert(root, val):
+            if root is None:
+                return type(self).TreeNode(val)
+            # 根据二叉搜索树的定义：左子树的所有节点的值都比根节点的值小
+            if val < root.val:
+                root.left = _insert(root.left, val)
+            elif val > root.val:
+                root.right = _insert(root.right, val)
+            else:
+                # 严格定义的二叉搜索树中不允许有相同的值
+                raise ValueError(f"val: {val} must lt or gt root.val: {root.val}")
+            return root
+        self._root = _insert(self._root, val)
+    
+    def _get_min_value(self, root):
+        while root and root.left is not None:
+            root = root.left
+        return root.val
 
-    def remove(self):
-        pass
-
-    def search(self):
-        pass
+    def remove(self, val):
+        def _remove(root, val):
+            if root is None:
+                return None
+            if val < root.val:
+                root.left = _remove(root.left, val)
+            elif val > root.val:
+                root.right = _remove(root.right, val)
+            else:
+                # 删除的是根节点
+                # 如果左子树是空子树
+                if root.left is None:
+                    right = root.right
+                    root = None
+                    return right
+                elif root.right is None:
+                    left = root.left
+                    root = None
+                    return left
+                else:
+                    minValue = self._get_min_value(root.right)
+                    root.val = minValue
+                    root.right = _remove(root.right, minValue)
+            return root
+        self._root = _remove(self._root, val)
 
 
 # class TrieTree:
@@ -143,3 +180,23 @@ class TrieTree:
                     return
                 cur = self._tree[cur][j]
             self._end[cur] -= 1
+
+
+class AVLTree:
+
+    class TreeNode:
+
+        def __init__(self, val) -> None:
+            self.val = val
+            self.left = None
+            self.right = None
+            self.height = 1
+
+    def __init__(self) -> None:
+        pass
+
+    def insert(self, val):
+        pass
+
+    def remove(self, val):
+        pass
