@@ -1,5 +1,11 @@
 class Heap:
+    """
+    堆是一种特殊的完全二叉树，这个结构（大顶堆/小顶堆）中任何一个子结构的最大值/最小值都在其顶部。完全二叉树和数组下标的对应如下：
 
+    1. i 位置的父亲节点是：(i - 1) / 2
+    2. i 位置的左孩子是：(i * 2) + 1
+    3. i 位置的右孩子是：(i * 2) + 2
+    """
     def __init__(self, n, cmp=lambda a, b: a > b):
         """大顶堆定义：maxHeap = Heap(n, cmp=lambda a, b: a > b)
         小顶堆定义：minHeap = Heap(n, cmp=lambda a, b: a < b)
