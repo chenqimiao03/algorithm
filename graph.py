@@ -128,7 +128,7 @@
 #         return ''.join(result)
 
 
-class Digraph:
+class Graph:
     
     class Vertex:
         
@@ -151,40 +151,48 @@ class Digraph:
         
         def __init__(self, frm, to, weight):
             self.weight, self.frm, self.to = weight, frm, to
+
+        def __gt__(self, o):
+            return self.weight > o.weight
+        
+        def __lt__(self, o):
+            return self.weight < o.weight
     
-    def __init__(self):
-        # 点集和边集
+    def __init__(self, vector=False):
+        # 点集、边集和有向图还是无向图
         # 点集 该点的数据项: Vertex
-        self.vertexs, self.edges = {}, set()
+        self.vertexs, self.edges, self.vector = {}, set(), vector
     
-    def addVertex(self, val):
+    def add_vertex(self, val):
         # 如果图中不存在点 v 则添加
         if self.vertexs.get(val, None) is None:
             self.vertexs[val] = type(self).Vertex(val)
         return 
     
-    def addEdge(self, frm, to, w):
-        # 建立一条边
-        new_edge = type(self).Edge(frm, to, w)
-        # 从点集中取出 from 点
-        frm = self.vertexs.get(frm)
-        # 检查起点为 from 的所有边，如果存在这么一条边就更新其权值
-        for edge in frm.edges:
-            if edge.to == to:
-                edge.weight = w
-                return
-        to = self.vertexs.get(to)
-        # 将点 to 加到 from 的邻居中
-        frm.nexts.append(to)
-        # 将边加入到 from 点的边集中
-        frm.edges.append(new_edge)
-        # from 的出度加 1
-        frm.Out += 1
-        # to 的入度加 1
-        to.In += 1
-        self.edges.add(new_edge)
+    def add_edge(self, frm, to, w):
+        def _add_edge(frm, to, w):
+            new_edge = type(self).Edge(frm, to, w)
+            # 从点集中取出 from 点
+            frm = self.vertexs.get(frm)
+            # 从点集中取出 to 点
+            to = self.vertexs.get(to)
+            # 将点 to 加到 from 的邻居中
+            frm.nexts.append(to)
+            # 将边加入到 from 点的边集中
+            frm.edges.append(new_edge)
+            # from 的出度加 1
+            frm.Out += 1
+            # to 的入度加 1
+            to.In += 1
+            self.edges.add(new_edge)
+        _add_edge(frm, to, w)
+        if not self.vector:
+            _add_edge(to, frm, w)
     
     def Topological(self):
+        # 无向图
+        if not self.vector:
+            return "exists ring"
         # 拓扑排序
         import collections
         HashMap = {} # 顶点: 当前顶点的剩余入度
@@ -205,6 +213,49 @@ class Digraph:
                 if HashMap[vertex.Val] == 0:
                     dq.append(vertex.Val)
         return result if len(result) == len(self.vertexs) else "exists ring"
+
+    def kruskal(self):
+        # kruskal 也可以不用建图
+        from dsu import DSU
+        n = len(self.vertexs)
+        DisjointSet = DSU(n)
+        keys = list(self.vertexs.keys())
+        mapping = {keys[i]: i for i in range(n)}
+        edges = list(self.edges)
+        # 边根据权重排序
+        edges.sort()
+        result = 0 # 最小生成树的权重
+        count = 0 # 最小生成树的边数
+        for edge in edges:
+            if DisjointSet.union(mapping.get(edge.frm), mapping.get(edge.to)):
+                result += edge.weight
+                count += 1
+        # n 个节点的最小生成必然有 n - 1 条边
+        return result if count == n - 1 else "orz"
+    
+    def prim(self):
+        # 时间复杂度：O(N + M) + O(M * log(M))
+        from random import choice
+        from heap import Heap
+        HashSet = set()
+        n = len(self.edges)
+        h = Heap(n, cmp=lambda a, b: a < b)
+        vertex = choice(list(self.vertexs.values())) # 从点集中随机取出一点
+        for edge in vertex.edges:
+            h.heappush(edge)
+        count = 1
+        result = 0
+        HashSet.add(vertex.Val)
+        while not h.empty():
+            edge = h.heappop()
+            to = edge.to
+            if to not in HashSet:
+                HashSet.add(to)
+                count += 1
+                result += edge.weight
+                for e in self.vertexs.get(to).edges:
+                    h.heappush(e)
+        return result if count == len(self.vertexs) else "orz"
 
     def __repr__(self):
         for k, v in self.vertexs.items():

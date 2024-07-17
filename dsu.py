@@ -34,6 +34,8 @@ class DSU:
             else:
                 self._size[fy] += self._size[fx]
                 self._father[fx] = fy
+            return True
+        return False
 
     def isSameSet(self, x, y):
         return self.find(x) == self.find(y)

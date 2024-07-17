@@ -61,3 +61,6 @@ class Heap:
             self.heapify(0)
             return ret
         raise Exception('the heap is empty')
+    
+    def empty(self):
+        return self._size == 0
